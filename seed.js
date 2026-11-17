@@ -3,60 +3,149 @@ const connectDB = require('./config/db');
 const Service = require('./models/Service');
 
 const sampleServices = [
+  // --- 1. Plumbing (2 services) ---
   {
-    name: 'Deep Home Cleaning',
-    description: 'Complete sanitization and deep cleaning for living rooms, bedrooms, kitchen, and bathrooms using eco-friendly supplies.',
+    name: 'Emergency Pipe Leak & Burst Repair',
+    description: 'Rapid response leak detection and repair for broken pipes, leaking joints, valves, and water supply lines.',
+    category: 'Plumbing',
+    price: 45,
+    durationMinutes: 60,
+    image: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800',
+    rating: 4.7,
+    reviewCount: 138,
+    isFeatured: true,
+  },
+  {
+    name: 'Drain Unclogging & Fixture Installation',
+    description: 'Clearing stubborn drain clogs in sinks, bathtubs, and toilets, plus new faucet and showerhead fittings.',
+    category: 'Plumbing',
+    price: 35,
+    durationMinutes: 45,
+    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800',
+    rating: 4.6,
+    reviewCount: 92,
+    isFeatured: false,
+  },
+
+  // --- 2. Electrical (2 services) ---
+  {
+    name: 'Complete Home Electrical Inspection & Wiring',
+    description: 'Safety audit, circuit breaker troubleshooting, short circuit diagnosis, and certified electrical rewiring.',
+    category: 'Electrical',
+    price: 55,
+    durationMinutes: 90,
+    image: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800',
+    rating: 4.8,
+    reviewCount: 165,
+    isFeatured: true,
+  },
+  {
+    name: 'Ceiling Fan & Light Fixture Setup',
+    description: 'Professional mounting and wiring of ceiling fans, chandeliers, pendant lamps, and LED smart light strips.',
+    category: 'Electrical',
+    price: 30,
+    durationMinutes: 45,
+    image: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=800',
+    rating: 4.5,
+    reviewCount: 78,
+    isFeatured: false,
+  },
+
+  // --- 3. Painting (2 services) ---
+  {
+    name: 'Interior Wall & Ceiling Painting',
+    description: 'Premium double-coat emulsion painting, wall putty preparation, and crack filling for living spaces and bedrooms.',
+    category: 'Painting',
+    price: 120,
+    durationMinutes: 240,
+    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800',
+    rating: 4.8,
+    reviewCount: 112,
+    isFeatured: true,
+  },
+  {
+    name: 'Waterproof Exterior Painting & Primer',
+    description: 'Weather-resistant exterior paint application, damp-proofing primer, and mold prevention coating.',
+    category: 'Painting',
+    price: 180,
+    durationMinutes: 360,
+    image: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800',
+    rating: 4.6,
+    reviewCount: 64,
+    isFeatured: false,
+  },
+
+  // --- 4. AC & Appliances (2 services) ---
+  {
+    name: 'Split & Window AC Jet Wash & Gas Top-up',
+    description: 'High-pressure jet wash cleaning of indoor/outdoor units, coil sanitization, cooling check, and refrigerant top-up.',
+    category: 'AC & Appliances',
+    price: 50,
+    durationMinutes: 90,
+    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800',
+    rating: 4.9,
+    reviewCount: 240,
+    isFeatured: true,
+  },
+  {
+    name: 'Refrigerator & Washing Machine Repair',
+    description: 'Comprehensive diagnosis and component replacement for cooling issues, motor faults, drum vibrations, and water leaks.',
+    category: 'AC & Appliances',
+    price: 40,
+    durationMinutes: 75,
+    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800',
+    rating: 4.7,
+    reviewCount: 105,
+    isFeatured: false,
+  },
+
+  // --- 5. Cleaning (2 services) ---
+  {
+    name: 'Deep Home Sanitization & Cleaning',
+    description: 'Intensive whole-home scrub, vacuuming, floor polishing, bathroom descaling, and eco-friendly disinfection.',
     category: 'Cleaning',
     price: 85,
     durationMinutes: 180,
-    imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800',
-    isFeatured: true
+    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800',
+    rating: 4.9,
+    reviewCount: 315,
+    isFeatured: true,
   },
   {
-    name: 'AC Servicing & Gas Refill',
-    description: 'Full split/window AC jet wash, filter cleaning, cooling check, and refrigerant gas top-up by certified technicians.',
-    category: 'Repair',
-    price: 45,
-    durationMinutes: 90,
-    imageUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800',
-    isFeatured: true
-  },
-  {
-    name: 'Full Car Interior Detailing',
-    description: 'Steam cleaning, leather conditioning, dashboard polishing, and odor removal for all vehicle types.',
-    category: 'Automotive',
-    price: 65,
+    name: 'Sofa, Carpet & Mattress Steam Wash',
+    description: 'Deep fabric shampooing, high-temp steam stain removal, allergen extraction, and rapid moisture suction drying.',
+    category: 'Cleaning',
+    price: 60,
     durationMinutes: 120,
-    imageUrl: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800',
-    isFeatured: false
+    image: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=800',
+    rating: 4.8,
+    reviewCount: 178,
+    isFeatured: false,
   },
+
+  // --- 6. Spa (2 services) ---
   {
-    name: 'Plumbing & Leak Repair',
-    description: 'Quick diagnosis and repair of pipe leaks, faucet replacements, clogged drains, and water heater issues.',
-    category: 'Repair',
-    price: 35,
-    durationMinutes: 60,
-    imageUrl: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800',
-    isFeatured: false
-  },
-  {
-    name: 'Salon & Spa at Home',
-    description: 'Relaxing facial, hair spa, and manicure package delivered in the comfort of your home.',
-    category: 'Wellness',
-    price: 55,
+    name: 'Swedish Aroma Therapy Full Body Spa',
+    description: 'Therapeutic essential oil massage, muscle relaxation therapy, and stress-relieving acupressure head massage.',
+    category: 'Spa',
+    price: 75,
     durationMinutes: 90,
-    imageUrl: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800',
-    isFeatured: true
+    image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800',
+    rating: 4.9,
+    reviewCount: 224,
+    isFeatured: true,
   },
   {
-    name: 'Laptop & PC Optimization',
-    description: 'Hardware dust cleaning, thermal paste replacement, OS speedup, and malware removal.',
-    category: 'Tech Support',
-    price: 40,
+    name: 'Herbal Glow Facial & Body Polish',
+    description: 'Deep-pore organic facial treatment, fruit scrub exfoliation, and relaxing hydration mask for radiant skin.',
+    category: 'Spa',
+    price: 55,
     durationMinutes: 60,
-    imageUrl: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=800',
-    isFeatured: false
-  }
+    image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800',
+    rating: 4.7,
+    reviewCount: 96,
+    isFeatured: false,
+  },
 ];
 
 const seedDB = async () => {
@@ -64,7 +153,7 @@ const seedDB = async () => {
     await connectDB();
     await Service.deleteMany({});
     await Service.insertMany(sampleServices);
-    console.log('Sample services seeded successfully!');
+    console.log(`12 sample services across 6 categories seeded successfully!`);
     process.exit(0);
   } catch (error) {
     console.error('Seed Error:', error.message || error);

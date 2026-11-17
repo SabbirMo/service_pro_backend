@@ -12,7 +12,7 @@ router.use(protect);
 // @access  Private
 router.get('/me', async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select('-password');
+    const user = await User.findById(req.user._id).select('-password -refreshToken');
     if (!user) {
       return res.status(404).json({
         success: false,

@@ -5,35 +5,47 @@ const serviceSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     description: {
       type: String,
-      required: true
+      required: true,
+      trim: true,
     },
     category: {
       type: String,
-      required: true
+      required: true,
+      trim: true,
     },
     price: {
       type: Number,
-      required: true
+      required: true,
     },
     durationMinutes: {
       type: Number,
-      required: true
+      required: true,
     },
-    imageUrl: {
+    image: {
       type: String,
-      default: ''
+      default: '',
     },
     isFeatured: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+    rating: {
+      type: Number,
+      default: 4.5,
+      min: 0,
+      max: 5,
+    },
+    reviewCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
