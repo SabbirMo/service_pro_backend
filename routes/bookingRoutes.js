@@ -3,6 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Booking = require('../models/Booking');
 const Service = require('../models/Service');
+const User = require('../models/User');
+const Notification = require('../models/Notification');
 const protect = require('../middleware/authMiddleware');
 
 // Protect all booking routes
@@ -154,6 +156,29 @@ router.post('/', async (req, res) => {
     // Populate service and user details
     await newBooking.populate('service');
     await newBooking.populate('user', 'name email image address');
+
+    // Trigger Admin Notification for all users with role: 'admin'
+    try {
+      const customerName = newBooking.user?.name || req.user.name || 'Customer';
+      const serviceName = newBooking.service?.name || serviceDoc.name || 'Service';
+      const admins = await User.find({ role: 'admin' });
+
+      if (admins.length > 0) {
+        const adminNotifications = admins.map((admin) => ({
+          user: admin._id,
+          recipientRole: 'admin',
+          title: 'New Booking Request! 🔔',
+          message: `${customerName} booked ${serviceName} on ${trimmedDate} at ${trimmedTimeSlot}.`,
+          bookingId: newBooking._id,
+          booking: newBooking._id,
+          type: 'BOOKING',
+          isRead: false,
+        }));
+        await Notification.insertMany(adminNotifications);
+      }
+    } catch (notifErr) {
+      console.error('Failed to trigger admin notifications on new booking:', notifErr);
+    }
 
     return res.status(201).json({
       success: true,
