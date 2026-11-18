@@ -5,6 +5,8 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const connectDB = require('./config/db');
 const User = require('./models/User');
+const Service = require('./models/Service');
+const { sampleServices } = require('./seed');
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -36,9 +38,25 @@ const seedDefaultAdmin = async () => {
   }
 };
 
+// Auto-seed 12 default services ONLY if the catalog is completely empty
+const seedDefaultServices = async () => {
+  try {
+    const count = await Service.countDocuments();
+    if (count === 0) {
+      await Service.insertMany(sampleServices);
+      console.log('12 default services seeded successfully into empty catalog');
+    } else {
+      console.log(`Service catalog already has ${count} services. Auto-seeding skipped to preserve existing data.`);
+    }
+  } catch (error) {
+    console.error('Error auto-seeding default services:', error.message);
+  }
+};
+
 // Connect to MongoDB
-connectDB().then(() => {
-  seedDefaultAdmin();
+connectDB().then(async () => {
+  await seedDefaultAdmin();
+  await seedDefaultServices();
 });
 
 const app = express();

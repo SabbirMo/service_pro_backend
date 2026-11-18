@@ -151,14 +151,27 @@ const sampleServices = [
 const seedDB = async () => {
   try {
     await connectDB();
-    await Service.deleteMany({});
-    await Service.insertMany(sampleServices);
-    console.log(`12 sample services across 6 categories seeded successfully!`);
-    process.exit(0);
+    const count = await Service.countDocuments();
+    if (count === 0) {
+      await Service.insertMany(sampleServices);
+      console.log(`12 sample services across 6 categories seeded successfully!`);
+    } else {
+      console.log(`Catalog already contains ${count} services. Seeding skipped to protect existing services.`);
+    }
+    if (require.main === module) {
+      process.exit(0);
+    }
   } catch (error) {
     console.error('Seed Error:', error.message || error);
-    process.exit(1);
+    if (require.main === module) {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 
-seedDB();
+if (require.main === module) {
+  seedDB();
+}
+
+module.exports = { sampleServices, seedDB };
