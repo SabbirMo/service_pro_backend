@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
+const aiRoutes = require('./routes/aiRoutes');
 
 // Connect to MongoDB
 connectDB();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'API is running...' });
